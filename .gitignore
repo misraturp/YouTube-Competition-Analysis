@@ -1,3 +1,4 @@
 results
 analytics
 .DS_Store
+__pycache__

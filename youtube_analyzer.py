@@ -10,8 +10,9 @@ youtube_api_key = st.text_input("Please enter your YouTube API Key")
 # upload a list of similar channels
 st.subheader("Step 2: Upload a CSV of similar channels", divider="rainbow")
 st.write("The csv file needs to have a header 'channels'. Will work on making this better. If you don't upload anything a default file will be used.")
-similar_channels_df = st.file_uploader("Choose a file")
-if similar_channels_df is not None:
+similar_channels = st.file_uploader("Choose a file")
+if similar_channels is not None:
+    similar_channels_df = pd.DataFrame(similar_channels)
     similar_channels_list = similar_channels_df['channels'].to_list()
 else:
     similar_channels_df = pd.read_csv("similar_channels.csv")
