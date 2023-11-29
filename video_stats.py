@@ -6,10 +6,13 @@ import os
 
 today = date.today()
 
-def get_video_stats(youtube_api_key, similar_channels_list, number_results, quantile):
+all_videos = []
 
-    # similar_channels_df = pd.read_csv("similar_channels.csv")
-    # similar_channels_list = similar_channels_df['channels'].to_list()
+def get_video_stats(youtube_api_key, similar_channels_list, number_results):
+
+    print(similar_channels_list)
+    similar_channels_df = pd.read_csv("similar_channels.csv")
+    similar_channels_list = similar_channels_df['channels'].to_list()
 
     for channel_id in similar_channels_list:
         # get a list of latest videos of this channel
@@ -59,14 +62,22 @@ def get_video_stats(youtube_api_key, similar_channels_list, number_results, quan
 
                 channel_video_stats.append(video_data)
 
-        channel_df = pd.DataFrame(channel_video_stats)
-        channel_df['most_views'] = channel_df['video_view_count'].astype(int).quantile(quantile)
-        channel_df['well_performers'] = channel_df['video_view_count'].astype(float)>channel_df['most_views']
-        channel_df['video_pub_date'] = pd.to_datetime(channel_df['video_pub_date']).dt.date
+        all_videos.extend(channel_video_stats)
 
-        if not os.path.exists(f'results/{channel_id}'):
-            os.mkdir(f'results/{channel_id}')
-        channel_df.to_csv(f'results/{channel_id}/videos.csv')
+        # channel_df = pd.DataFrame(channel_video_stats)
+        # channel_df['most_views'] = channel_df['video_view_count'].astype(int).quantile(quantile)
+        # channel_df['well_performers'] = channel_df['video_view_count'].astype(float)>channel_df['most_views']
+        # channel_df['video_pub_date'] = pd.to_datetime(channel_df['video_pub_date']).dt.date
+
+        # if not os.path.exists(f'results/{channel_id}'):
+        #     os.mkdir(f'results/{channel_id}')
+        # channel_df.to_csv(f'results/{channel_id}/videos.csv')
 
         print(f'{channel_id} is done being analyzed.')
 
+    all_videos_df = pd.DataFrame(all_videos)
+    print(all_videos_df)
+    return all_videos_df
+
+
+# get_video_stats("AIzaSyC_43cRsjiXhiepBELNQuwvfA6QaEanqyI", ["UCR9j1jqqB5Rse69wjUnbYwA","UCpV_X0VrL8-jg3t6wYGS-1g"], 10, 0.9)

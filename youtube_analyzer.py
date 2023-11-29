@@ -1,4 +1,5 @@
 import streamlit as st
+from io import StringIO
 import pandas as pd
 from outstanding_videos import get_outstanding_videos
 from video_stats import get_video_stats
@@ -11,14 +12,14 @@ youtube_api_key = st.text_input("Please enter your YouTube API Key")
 st.subheader("Step 2: Upload a CSV of similar channels", divider="rainbow")
 st.write("If you don't upload anything a default file will be used.")
 similar_channels = st.file_uploader("Choose a file")
+
 if similar_channels is not None:
-    similar_channels_df = pd.DataFrame(similar_channels, columns=["channels"])
-    print(similar_channels_df)
-    similar_channels_list = similar_channels_df['channels'].to_list()
+    stringio = StringIO(similar_channels.getvalue().decode("utf-8"))
+    string_data = stringio.read()
+    similar_channels_list = string_data.replace('\n', ' ').split(" ") 
 else:
     similar_channels_df = pd.read_csv("similar_channels.csv")
     similar_channels_list = similar_channels_df['channels'].to_list()
-
 
 st.subheader("Step 3: Set analysis options", divider="rainbow")
 # How far back do you want to look?
@@ -41,8 +42,8 @@ def convert_df(df):
     return df.to_csv().encode('utf-8')
 
 if start_analysis:
-    get_video_stats(youtube_api_key, similar_channels_list, number_results, quantile)
-    outstanding_videos = get_outstanding_videos(threshold)
+    all_videos_df = get_video_stats(youtube_api_key, similar_channels_list, number_results)
+    outstanding_videos = get_outstanding_videos(threshold, all_videos_df, quantile)
     st.dataframe(outstanding_videos)
 
     csv = convert_df(outstanding_videos)
