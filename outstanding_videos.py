@@ -35,7 +35,7 @@ def get_outstanding_videos(threshold, all_videos_df, quantile):
     #         all_outstanding_videos = all_outstanding_videos.append(outstanding_videos)
 
     print(outstanding_videos)
-    outstanding_videos.to_csv("analytics/all_outstanding_videos.csv")
+    # outstanding_videos.to_csv("analytics/all_outstanding_videos.csv")
     return outstanding_videos
 
     
