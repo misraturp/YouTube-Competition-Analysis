@@ -5,7 +5,6 @@ from outstanding_videos import get_outstanding_videos
 from video_stats import get_video_stats
 
 st.subheader("Step 1: Specify your YouTube API Key", divider="rainbow")
-# youtube_api_key = "AIzaSyC_43cRsjiXhiepBELNQuwvfA6QaEanqyI"
 youtube_api_key = st.text_input("Please enter your YouTube API Key")
 
 # upload a list of similar channels
