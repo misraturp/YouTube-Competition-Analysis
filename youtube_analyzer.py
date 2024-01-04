@@ -12,6 +12,9 @@ st.subheader("Step 2: Upload a CSV of similar channels", divider="rainbow")
 st.write("If you don't upload anything a default file will be used.")
 similar_channels = st.file_uploader("Choose a file")
 
+# similar_channels_list = pd.read_csv("similar_channels original.csv")['channels'].to_list()
+# print(similar_channels_list)
+
 if similar_channels is not None:
     stringio = StringIO(similar_channels.getvalue().decode("utf-8"))
     string_data = stringio.read()
@@ -35,6 +38,10 @@ quantile = st.slider('What is an outstanding video for you (quantile)?', 0.7, 0.
 
 start_analysis = st.button("Start analysis", type="primary")
 
+threshold = 10
+number_results = 10
+quantile = 0.9
+
 @st.cache_resource
 def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
@@ -43,6 +50,7 @@ def convert_df(df):
 if start_analysis:
     all_videos_df = get_video_stats(youtube_api_key, similar_channels_list, number_results)
     outstanding_videos = get_outstanding_videos(threshold, all_videos_df, quantile)
+    print(outstanding_videos)
     st.dataframe(outstanding_videos)
 
     csv = convert_df(outstanding_videos)
@@ -53,5 +61,7 @@ if start_analysis:
         file_name='outstanding_videos.csv',
         mime='text/csv',
     )
+
+
 
 

@@ -11,8 +11,6 @@ all_videos = []
 def get_video_stats(youtube_api_key, similar_channels_list, number_results):
 
     print(similar_channels_list)
-    similar_channels_df = pd.read_csv("similar_channels.csv")
-    similar_channels_list = similar_channels_df['channels'].to_list()
 
     for channel_id in similar_channels_list:
         # get a list of latest videos of this channel

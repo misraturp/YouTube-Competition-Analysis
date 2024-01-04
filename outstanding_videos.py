@@ -14,11 +14,13 @@ def get_outstanding_videos(threshold, all_videos_df, quantile):
     all_videos_df['video_pub_date'] = pd.to_datetime(all_videos_df['video_pub_date']).dt.date
 
     outstanding_videos = all_videos_df[all_videos_df["well_performers"]]
+    all_videos_df.to_csv("all_videos.csv")
+    outstanding_videos.to_csv("outstanding_videos.csv")
 
     cutoff_date = today - pd.Timedelta(days=threshold)
 
     outstanding_videos['video_pub_date'] = pd.to_datetime(outstanding_videos['video_pub_date']).dt.date
-    outstanding_videos = outstanding_videos[outstanding_videos["video_pub_date"]>cutoff_date]
+    # outstanding_videos = outstanding_videos[outstanding_videos["video_pub_date"]>cutoff_date]
 
     # all_outstanding_videos = pd.DataFrame()
 
@@ -35,6 +37,7 @@ def get_outstanding_videos(threshold, all_videos_df, quantile):
     #         all_outstanding_videos = all_outstanding_videos.append(outstanding_videos)
 
     print(outstanding_videos)
+    outstanding_videos.to_csv("out.csv")
     # outstanding_videos.to_csv("analytics/all_outstanding_videos.csv")
     return outstanding_videos
 
